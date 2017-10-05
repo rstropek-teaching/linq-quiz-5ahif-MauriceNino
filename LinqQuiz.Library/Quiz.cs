@@ -16,7 +16,16 @@ namespace LinqQuiz.Library
         /// </exception>
         public static int[] GetEvenNumbers(int exclusiveUpperLimit)
         {
-            throw new NotImplementedException();
+            // "You can solve the quiz without LINQ but you will have to write many more lines of code."
+            // "I like writing code"
+            List<int> ret = new List<int>();
+
+            if (exclusiveUpperLimit < 1) throw new ArgumentOutOfRangeException();
+
+            for (int i = 1; i < exclusiveUpperLimit; i++)
+                if (i % 2 == 0) ret.Add(i);
+
+            return ret.ToArray();
         }
 
         /// <summary>
@@ -33,7 +42,24 @@ namespace LinqQuiz.Library
         /// </remarks>
         public static int[] GetSquares(int exclusiveUpperLimit)
         {
-            throw new NotImplementedException();
+            // "You can solve the quiz without LINQ but you will have to write many more lines of code."
+            // "I like writing code"
+            if (exclusiveUpperLimit < 1) return new int[] { };
+
+            List<int> ret = new List<int>();
+
+            for (int i=1; i<exclusiveUpperLimit; i++)
+            {
+                if (Math.Pow(i, 2) > int.MaxValue) throw new OverflowException();
+                else {
+
+                    int pow = (int)Math.Pow(i, 2);
+                    if (i % 7 == 0) ret.Add(pow);
+                }
+            }
+            ret.Reverse();
+
+            return ret.ToArray();
         }
 
         /// <summary>
@@ -52,7 +78,44 @@ namespace LinqQuiz.Library
         /// </remarks>
         public static FamilySummary[] GetFamilyStatistic(IReadOnlyCollection<IFamily> families)
         {
-            throw new NotImplementedException();
+            // "You can solve the quiz without LINQ but you will have to write many more lines of code."
+            // "I like writing code"
+            // Code is "inspired"
+
+            /*if (families == null) throw new ArgumentNullException();
+
+            List<FamilySummary> familysummary = new List<FamilySummary>();
+
+            for(int i=0; i<families.Count(); i++)
+            {
+                FamilySummary summary = new FamilySummary();
+                summary.FamilyID = families.ElementAt(i).ID;
+                if (families.ElementAt(i).Persons.Count()==0)
+                {
+                    summary.NumberOfFamilyMembers = 0;
+                    summary.AverageAge = 0;
+                }
+                else
+                {
+                    summary.NumberOfFamilyMembers = families.ElementAt(i).Persons.Count();
+                    decimal averageage = 0;
+                    for (int j = 0; j < summary.NumberOfFamilyMembers; j++)
+                    {
+                        averageage += families.ElementAt(i).Persons.ElementAt(j).Age;
+                    }
+                    averageage /= families.ElementAt(i).Persons.Count();
+                    summary.AverageAge = averageage;
+                }
+                familysummary.Append(summary);
+            }
+
+            return familysummary.ToArray();*/
+
+            return families.Select(family => new FamilySummary {
+                AverageAge = family.Persons.Count() <= 0 ? 0 : family.Persons.Average(person => person.Age),
+                FamilyID = family.ID,
+                NumberOfFamilyMembers = family.Persons.Count()
+            }).ToArray();
         }
 
         /// <summary>
@@ -70,7 +133,29 @@ namespace LinqQuiz.Library
         /// </remarks>
         public static (char letter, int numberOfOccurrences)[] GetLetterStatistic(string text)
         {
-            throw new NotImplementedException();
+            // "You can solve the quiz without LINQ but you will have to write many more lines of code."
+            // "I like writing code"
+            // Code is "inspired"
+            text.ToUpper();
+            text.ToCharArray();
+            string newStr = "";
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (Char.IsLetter(text[i]))
+                {
+                    newStr += text[i];
+                }
+            }
+            Dictionary<char, int> occs = newStr.Distinct().Select(x => new KeyValuePair<char, int>(x, newStr.Count(f => f == x))).ToDictionary(k => k.Key, v => v.Value);
+            var expectedResult = new(char letter, int numberOfOccurrences)[occs.Count];
+            for (int i = 0; i < occs.Count; i++)
+            {
+                var element = occs.ElementAt(i);
+                expectedResult[i].letter = element.Key;
+                expectedResult[i].numberOfOccurrences = element.Value;
+
+            }
+            return expectedResult;
         }
     }
 }
