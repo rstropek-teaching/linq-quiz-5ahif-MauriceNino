@@ -18,14 +18,17 @@ namespace LinqQuiz.Library
         {
             // "You can solve the quiz without LINQ but you will have to write many more lines of code."
             // "I like writing code"
-            List<int> ret = new List<int>();
+            /*List<int> ret = new List<int>();
 
             if (exclusiveUpperLimit < 1) throw new ArgumentOutOfRangeException();
 
             for (int i = 1; i < exclusiveUpperLimit; i++)
                 if (i % 2 == 0) ret.Add(i);
 
-            return ret.ToArray();
+            return ret.ToArray();*/
+            return (from num in Enumerable.Range(1, exclusiveUpperLimit - 1)
+                    where (num % 2) == 0
+                    select num).ToArray();
         }
 
         /// <summary>
@@ -44,7 +47,7 @@ namespace LinqQuiz.Library
         {
             // "You can solve the quiz without LINQ but you will have to write many more lines of code."
             // "I like writing code"
-            if (exclusiveUpperLimit < 1) return new int[] { };
+            /*if (exclusiveUpperLimit < 1) return new int[] { };
 
             List<int> ret = new List<int>();
 
@@ -59,7 +62,11 @@ namespace LinqQuiz.Library
             }
             ret.Reverse();
 
-            return ret.ToArray();
+            return ret.ToArray();*/
+            return (from num in Enumerable.Range(1, (exclusiveUpperLimit > 1) ? exclusiveUpperLimit - 1 : 1)
+                    orderby num descending
+                    where ((checked(num * num) % 7) == 0)
+                    select num * num).ToArray();
         }
 
         /// <summary>
@@ -136,7 +143,7 @@ namespace LinqQuiz.Library
             // "You can solve the quiz without LINQ but you will have to write many more lines of code."
             // "I like writing code"
             // Code is "inspired"
-            text.ToUpper();
+            /*text.ToUpper();
             text.ToCharArray();
             string newStr = "";
             for (int i = 0; i < text.Length; i++)
@@ -155,7 +162,12 @@ namespace LinqQuiz.Library
                 expectedResult[i].numberOfOccurrences = element.Value;
 
             }
-            return expectedResult;
+            return expectedResult;*/
+            return text.Trim().Distinct()
+                .Where(f => char.IsLetter(f))
+                .Select((char let, int num) => {
+                    return (let, text.Count(f => f == let));
+                }).ToArray();
         }
     }
 }
